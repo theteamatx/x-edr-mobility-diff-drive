@@ -1,0 +1,106 @@
+// Copyright 2023 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package mobility.diff_drive;
+
+import "eigenmath/eigenmath.proto";
+
+message ArcVectorProto {
+  double translation = 1;
+  double rotation = 2;
+}
+
+message WheelVectorProto {
+  double left = 1;
+  double right = 2;
+}
+
+message KinematicsProto {
+  WheelVectorProto wheel_radius = 1;
+  double wheel_base = 2;
+}
+
+message BoxConstraintsProto {
+  WheelVectorProto min_wheel = 1;
+  WheelVectorProto max_wheel = 2;
+  ArcVectorProto min_arc = 3;
+  ArcVectorProto max_arc = 4;
+}
+
+message DynamicLimitsProto {
+  KinematicsProto kinematics = 1;
+  BoxConstraintsProto velocity_limits = 2;
+  BoxConstraintsProto acceleration_limits = 3;
+}
+
+message TrajectoryLimitsProto {
+  WheelVectorProto max_wheel_velocity_jump = 1;
+  ArcVectorProto max_arc_velocity_jump = 2;
+  double min_cycle_duration = 3;
+}
+
+message CurvePointProto {
+  eigenmath.Pose2dProto pose = 3;
+  double curvature = 2;
+
+  reserved 1;
+}
+
+message CurvePtAndCordProto {
+  double cord_length = 1;
+  CurvePointProto point = 2;
+}
+
+message CurveProto {
+  repeated CurvePtAndCordProto points = 1;
+}
+
+message PiecewiseLinearCurveProto {
+  repeated eigenmath.Vector2dProto points = 3;
+  double final_angle = 2;
+
+  reserved 1;
+}
+
+message StateProto {
+  eigenmath.Pose2dProto pose = 3;
+  ArcVectorProto arc_velocity = 2;
+
+  reserved 1;
+}
+
+message StateAndTimeProto {
+  double time = 1;
+  StateProto state = 2;
+}
+
+message TrajectoryProto {
+  repeated StateAndTimeProto states = 1;
+}
+
+message WheelStateProto {
+  WheelVectorProto wheel_positions = 1;
+  WheelVectorProto wheel_motion_rates = 2;
+}
+
+message WheelStateAndTotalMotionProto {
+  double total_motion = 1;
+  WheelStateProto state = 2;
+}
+
+message WheelCurveProto {
+  repeated WheelStateAndTotalMotionProto states = 1;
+}
