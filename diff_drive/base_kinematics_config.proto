@@ -14,13 +14,13 @@
 
 syntax = "proto3";
 
-package mobility;
+package mobility.diff_drive;
 
 import "diff_drive/diff_drive.proto";
 
 // Next Id: 2
 message BaseKinematicsConfig {
   // Wheel diff-drive kinematics of the robot.
-  mobility.diff_drive.KinematicsProto kinematics = 1;
+  KinematicsProto kinematics = 1;
 }
 

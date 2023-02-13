@@ -41,8 +41,6 @@ constexpr double kEpsilon = 1e-4;
 constexpr double kSmallEpsilon = 1e-6;
 constexpr double kTenNanoSeconds = 1.0e-8;  // 10 nanoseconds
 
-constexpr int kPrintPrecision = 16;
-
 bool AppendConvertedCurveToTrajectory(const Curve& curve,
                                       Interval<double> cord_length_span,
                                       double desired_speed,

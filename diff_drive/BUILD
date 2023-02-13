@@ -74,6 +74,26 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "motion_control",
+    srcs = [
+        "path_tracker.cc",
+        "state_feedback_control.cc",
+        "state_tracking_control.cc",
+    ],
+    hdrs = [
+        "path_tracker.h",
+        "state_feedback_control.h",
+        "state_tracking_control.h",
+    ],
+    deps = [
+        ":base_feedback_control_config_cc_proto",
+        ":differential_drive",
+        "@eigenmath//eigenmath",
+        "@com_google_absl//absl/types:span",
+    ],
+)
+
 proto_library(
     name = "diff_drive_proto",
     srcs = [
@@ -136,6 +156,18 @@ proto_library(
 cc_proto_library(
     name = "base_kinematics_config_cc_proto",
     deps = [":base_kinematics_config_proto"],
+)
+
+proto_library(
+    name = "base_feedback_control_config_proto",
+    srcs = [
+        "base_feedback_control_config.proto",
+    ],
+)
+
+cc_proto_library(
+    name = "base_feedback_control_config_cc_proto",
+    deps = [":base_feedback_control_config_proto"],
 )
 
 cc_library(
@@ -293,6 +325,44 @@ cc_test(
     deps = [
         ":differential_drive",
         ":test_fixtures",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "path_tracker_test",
+    srcs = [
+        "path_tracker_test.cc",
+    ],
+    deps = [
+        ":motion_control",
+        "@eigenmath//eigenmath:matchers",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "state_feedback_control_test",
+    srcs = [
+        "state_feedback_control_test.cc",
+    ],
+    deps = [
+        ":differential_drive",
+        ":motion_control",
+        "@eigenmath//eigenmath:matchers",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "state_tracking_control_test",
+    srcs = [
+        "state_tracking_control_test.cc",
+    ],
+    deps = [
+        ":differential_drive",
+        ":motion_control",
+        "@eigenmath//eigenmath:matchers",
         "@com_google_googletest//:gtest_main",
     ],
 )
