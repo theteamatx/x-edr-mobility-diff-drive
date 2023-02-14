@@ -20,10 +20,10 @@
 #include <iterator>
 #include <vector>
 
-#include "diff_drive/interval.h"
-#include "genit/iterator_range.h"
 #include "diff_drive/continuous_curve.h"
 #include "diff_drive/curve_point.h"
+#include "diff_drive/interval.h"
+#include "genit/iterator_range.h"
 
 namespace mobility::diff_drive {
 
@@ -153,7 +153,8 @@ class Curve : public ContinuousCurve {
 
   // Get an iterator to the first valid state stored in this trajectory.
   genit::IteratorRange<MutableCurvePointIterator> GetCurvePointIteratorRange() {
-    return genit::IteratorRange(MutableBeginCurvePoint(), MutableEndCurvePoint());
+    return genit::IteratorRange(MutableBeginCurvePoint(),
+                                MutableEndCurvePoint());
   }
 
   // Add a point to the curve at a given cord-length.

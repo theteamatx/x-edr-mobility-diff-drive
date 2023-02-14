@@ -19,10 +19,10 @@
 
 #include <cmath>
 
+#include "absl/strings/str_format.h"
 #include "eigenmath/mean_and_covariance.h"  // IWYU pragma: export
 #include "eigenmath/pose2.h"                // IWYU pragma: export
 #include "eigenmath/pose3.h"                // IWYU pragma: export
-#include "absl/strings/str_format.h"
 
 namespace mobility {
 

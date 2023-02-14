@@ -20,9 +20,9 @@
 #include <memory>
 #include <vector>
 
+#include "absl/status/status.h"
 #include "diff_drive/diff_drive.pb.h"
 #include "diff_drive/type_aliases.h"
-#include "absl/status/status.h"
 
 namespace mobility::diff_drive {
 

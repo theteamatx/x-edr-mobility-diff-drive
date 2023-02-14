@@ -17,8 +17,8 @@
 #ifndef MOBILITY_DIFF_DRIVE_DIFF_DRIVE_CONTINUOUS_CURVE_H_
 #define MOBILITY_DIFF_DRIVE_DIFF_DRIVE_CONTINUOUS_CURVE_H_
 
-#include "diff_drive/interval.h"
 #include "diff_drive/curve_point.h"
+#include "diff_drive/interval.h"
 #include "diff_drive/type_aliases.h"
 
 namespace mobility::diff_drive {

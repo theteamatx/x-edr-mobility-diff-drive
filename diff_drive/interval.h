@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 #ifndef MOBILITY_DIFF_DRIVE_DIFF_DRIVE_INTERVAL_H_
 #define MOBILITY_DIFF_DRIVE_DIFF_DRIVE_INTERVAL_H_
 

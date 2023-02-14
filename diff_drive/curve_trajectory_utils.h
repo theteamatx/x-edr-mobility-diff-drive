@@ -21,7 +21,6 @@
 #include <ostream>
 #include <string>
 
-#include "eigenmath/quintic_spline.h"
 #include "diff_drive/curve.h"
 #include "diff_drive/dynamic_limits.h"
 #include "diff_drive/kinematics.h"
@@ -29,6 +28,7 @@
 #include "diff_drive/trajectory_limits.h"
 #include "diff_drive/type_aliases.h"
 #include "diff_drive/wheel_curve.h"
+#include "eigenmath/quintic_spline.h"
 
 namespace mobility::diff_drive {
 
@@ -548,7 +548,7 @@ void AbslStringify(Sink& sink, const TrajectoryLimits& traj_limits) {
       traj_limits.GetMinCycleDuration());
 }
 
-#define MOBILITY_DIFF_DRIVE_DEFINE_OSTREAM_OPERATOR(TYPE)        \
+#define MOBILITY_DIFF_DRIVE_DEFINE_OSTREAM_OPERATOR(TYPE)             \
   inline std::ostream& operator<<(std::ostream& out, const TYPE& v) { \
     return out << absl::StrCat(v);                                    \
   }

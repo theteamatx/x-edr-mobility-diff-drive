@@ -20,11 +20,11 @@
 #include <algorithm>
 #include <vector>
 
-#include "eigenmath/matchers.h"
 #include "diff_drive/curve.h"
 #include "diff_drive/curve_trajectory_utils.h"
 #include "diff_drive/trajectory.h"
 #include "diff_drive/wheel_curve.h"
+#include "eigenmath/matchers.h"
 #include "gmock/gmock.h"
 
 namespace mobility::diff_drive::testing {
@@ -354,4 +354,3 @@ MATCHER_P2(TrajectoryEvaluatesTo, expected, tolerance, "") {
 }  // namespace mobility::diff_drive::testing
 
 #endif  // MOBILITY_DIFF_DRIVE_DIFF_DRIVE_TEST_UTILS_H_
-

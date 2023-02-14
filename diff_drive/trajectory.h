@@ -20,9 +20,9 @@
 #include <vector>
 
 #include "diff_drive/interval.h"
-#include "genit/iterator_range.h"
 #include "diff_drive/state.h"
 #include "diff_drive/type_aliases.h"
+#include "genit/iterator_range.h"
 
 namespace mobility::diff_drive {
 
