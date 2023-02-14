@@ -20,12 +20,12 @@
 #include <limits>
 #include <tuple>
 
+#include "absl/log/check.h"
+#include "absl/strings/str_format.h"
+#include "diff_drive/curve_trajectory_utils.h"  // IWYU pragma: keep
 #include "eigenmath/line_search.h"
 #include "eigenmath/quadrature.h"
 #include "genit/adjacent_iterator.h"
-#include "diff_drive/curve_trajectory_utils.h"  // IWYU pragma: keep
-#include "absl/log/check.h"
-#include "absl/strings/str_format.h"
 
 namespace mobility::diff_drive {
 
@@ -65,7 +65,8 @@ bool Trajectory::HasContinuousPosition() const {
 }
 
 bool Trajectory::HasContinuousPosition(double tolerance) const {
-  for (const auto segment : genit::AdjacentElementsRange<2>(GetStateIteratorRange())) {
+  for (const auto segment :
+       genit::AdjacentElementsRange<2>(GetStateIteratorRange())) {
     const State from_previous_pt =
         segment[0].state.ExtrapolateConstantVelocityArc(segment[1].time -
                                                         segment[0].time);
@@ -89,7 +90,8 @@ bool Trajectory::StatesHaveSamePosition(const State &s1, const State &s2,
 }
 
 bool Trajectory::HasMonotonicTimeValues() const {
-  for (const auto segment : genit::AdjacentElementsRange<2>(GetStateIteratorRange())) {
+  for (const auto segment :
+       genit::AdjacentElementsRange<2>(GetStateIteratorRange())) {
     if (segment[1].time < segment[0].time + kSmallestTimeStepSeconds) {
       return false;
     }
@@ -113,7 +115,8 @@ State Trajectory::Evaluate(double t) const {
 
 double Trajectory::ComputeTotalCordLength() const {
   double cord_length = 0.0;
-  for (const auto segment : genit::AdjacentElementsRange<2>(GetStateIteratorRange())) {
+  for (const auto segment :
+       genit::AdjacentElementsRange<2>(GetStateIteratorRange())) {
     auto dt = segment[1].time - segment[0].time;
     cord_length +=
         dt * std::abs(segment[0].state.GetArcVelocity().Translation());
@@ -213,9 +216,9 @@ Trajectory::StateIterator Trajectory::AddStationarySegment(double time,
     return EndState();
   }
   CHECK_GE(duration, kSmallestTimeStepSeconds) << absl::StrFormat(
-             "Cannot add a stationary segment of duration (%f) less "
-             "than minimum duration (%f)",
-             duration, kSmallestTimeStepSeconds);
+      "Cannot add a stationary segment of duration (%f) less "
+      "than minimum duration (%f)",
+      duration, kSmallestTimeStepSeconds);
   // Find the pair of states bracketing time in [t0, t1]
   auto it_t1 =
       std::upper_bound(states_.begin(), states_.begin() + states_count_, time,
@@ -259,11 +262,11 @@ void Trajectory::RemoveStationarySegment(StateIterator start, double duration) {
   if (start >= EndState() || IsEmpty()) {
     return;  // Nothing to do.
   }
-  CHECK_LE(
-      start->state.GetArcVelocity().lpNorm<Eigen::Infinity>(), kEpsilon) << absl::StrFormat(
-      "State to be removed is not stationary (arc velocity: %f, %f)",
-      start->state.GetArcVelocity().Translation(),
-      start->state.GetArcVelocity().Rotation());
+  CHECK_LE(start->state.GetArcVelocity().lpNorm<Eigen::Infinity>(), kEpsilon)
+      << absl::StrFormat(
+             "State to be removed is not stationary (arc velocity: %f, %f)",
+             start->state.GetArcVelocity().Translation(),
+             start->state.GetArcVelocity().Rotation());
   const int start_idx = start - BeginState();
 
   // If start is the last state, simply remove it.
@@ -304,8 +307,8 @@ void Trajectory::TimeWarpSegment(double speed_factor, StateIterator start) {
     return;  // Only need to adjust velocity if start is the last state.
   }
   auto mutable_end = mutable_start + 1;
-  CHECK_GE(std::abs(speed_factor), kEpsilon * kEpsilon) << absl::StrFormat(
-             "Cannot apply a zero (%f) speed factor", speed_factor);
+  CHECK_GE(std::abs(speed_factor), kEpsilon * kEpsilon)
+      << absl::StrFormat("Cannot apply a zero (%f) speed factor", speed_factor);
   const double original_dt = mutable_end->time - mutable_start->time;
   const double time_shift = original_dt / speed_factor - original_dt;
   for (; mutable_end != states_.begin() + states_count_; ++mutable_end) {
@@ -323,8 +326,8 @@ void Trajectory::TimeWarp(double speed_factor) {
                                     states_[0].state.GetArcVelocity());
     return;
   }
-  CHECK_GE(std::abs(speed_factor), kEpsilon) << absl::StrFormat(
-             "Cannot apply a zero (%f) speed factor", speed_factor);
+  CHECK_GE(std::abs(speed_factor), kEpsilon)
+      << absl::StrFormat("Cannot apply a zero (%f) speed factor", speed_factor);
   double accumulated_time_shift = 0.0;
   for (const auto mutable_segment : genit::AdjacentElementsRange<2>(
            states_.begin(), states_.begin() + states_count_)) {
@@ -494,8 +497,8 @@ void Trajectory::TruncateOrExtendTo(const Interval<double> &time_interval) {
   }
 
   if (!HasMonotonicTimeValues()) {
-    CHECK(false) << absl::StrFormat("Time in trajectory is not monotonic! Trajectory =\n%v\n",
-               *this);
+    CHECK(false) << absl::StrFormat(
+        "Time in trajectory is not monotonic! Trajectory =\n%v\n", *this);
   }
 }
 

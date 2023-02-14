@@ -17,8 +17,8 @@
 #include <algorithm>
 #include <iterator>
 
-#include "genit/adjacent_iterator.h"
 #include "absl/log/check.h"
+#include "genit/adjacent_iterator.h"
 
 namespace mobility::diff_drive {
 

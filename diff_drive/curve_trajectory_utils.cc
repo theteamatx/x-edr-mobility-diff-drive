@@ -24,15 +24,15 @@
 #include <sstream>
 #include <string>
 
-#include "eigenmath/line_search.h"
-#include "eigenmath/scalar_utils.h"
-#include "eigenmath/so2_interval.h"
-#include "genit/adjacent_iterator.h"
+#include "absl/log/check.h"
 #include "diff_drive/curve.h"
 #include "diff_drive/trajectory.h"
 #include "diff_drive/type_aliases.h"
 #include "diff_drive/wheel_curve.h"
-#include "absl/log/check.h"
+#include "eigenmath/line_search.h"
+#include "eigenmath/scalar_utils.h"
+#include "eigenmath/so2_interval.h"
+#include "genit/adjacent_iterator.h"
 
 namespace mobility::diff_drive {
 
@@ -1346,15 +1346,15 @@ bool ConvertQuinticSplineToCurve(const eigenmath::QuinticSpline& spline,
   if (spline.NumSegments() == 0) {
     return true;
   }
-  CHECK_EQ(spline.NumDof(), 2) <<
-             "Spline points should have 2 degrees of freedom.";
-  CHECK_GE(num_samples_per_segment, 3) <<
-             "Number of sample per spline segment should be at least 3.";
+  CHECK_EQ(spline.NumDof(), 2)
+      << "Spline points should have 2 degrees of freedom.";
+  CHECK_GE(num_samples_per_segment, 3)
+      << "Number of sample per spline segment should be at least 3.";
   const int num_samples =
       (num_samples_per_segment - 1) * spline.NumSegments() + 1;
   CHECK_GE(curve->GetCapacity(), num_samples + 1) << absl::StrFormat(
-             "Capacity of curve (%d) should be at least num_samples + 1 (%d).",
-             curve->GetCapacity(), num_samples + 1);
+      "Capacity of curve (%d) should be at least num_samples + 1 (%d).",
+      curve->GetCapacity(), num_samples + 1);
   const double spline_step = 1.0 / (num_samples_per_segment - 1);
 
   double current_spline_s = 0.0;
@@ -1363,8 +1363,8 @@ bool ConvertQuinticSplineToCurve(const eigenmath::QuinticSpline& spline,
   eigenmath::Vector2d prev_spline_tangent = spline.Sample<1>(current_spline_s);
   while (prev_spline_tangent.squaredNorm() < kSmallEpsilon * kSmallEpsilon) {
     current_spline_s += spline_step;
-    CHECK_LE(current_spline_s, spline.MaxSplineIndex()) <<
-               "The spline appears to be completely stationary.";
+    CHECK_LE(current_spline_s, spline.MaxSplineIndex())
+        << "The spline appears to be completely stationary.";
     // Use a finite difference to the next point:
     prev_spline_tangent = spline.Sample<0>(current_spline_s) - prev_spline_pt;
   }
@@ -1385,8 +1385,8 @@ bool ConvertQuinticSplineToCurve(const eigenmath::QuinticSpline& spline,
     }
     if (std::abs(next_spline_pt_relative.y()) < kSmallEpsilon) {
       // Straight segment:
-      CHECK_GT(next_spline_pt_relative.x(), 0.0) <<
-                 "Straight motion reversal detected in spline!";
+      CHECK_GT(next_spline_pt_relative.x(), 0.0)
+          << "Straight motion reversal detected in spline!";
       if (!curve->AddPoint(prev_cord, CurvePoint{prev_pose, 0.0})) {
         return false;
       }

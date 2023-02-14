@@ -20,8 +20,8 @@
 #include <iterator>
 #include <limits>
 
-#include "genit/adjacent_iterator.h"
 #include "absl/log/check.h"
+#include "genit/adjacent_iterator.h"
 
 namespace mobility::diff_drive {
 
@@ -325,4 +325,3 @@ CurvePtAndCord Curve::FindClosestMatchToPoint(const eigenmath::Vector2d &pt,
 }
 
 }  // namespace mobility::diff_drive
-

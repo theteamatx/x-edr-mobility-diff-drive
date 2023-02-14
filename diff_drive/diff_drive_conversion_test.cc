@@ -17,7 +17,6 @@
 #include <cmath>
 #include <string>
 
-#include "eigenmath/eigenmath.pb.h"
 #include "diff_drive/curve.h"
 #include "diff_drive/curve_point.h"
 #include "diff_drive/diff_drive.pb.h"
@@ -28,9 +27,10 @@
 #include "diff_drive/trajectory_limits.h"
 #include "diff_drive/wheel_curve.h"
 #include "diff_drive/wheel_state.h"
+#include "eigenmath/eigenmath.pb.h"
+#include "gmock/gmock.h"
 #include "google/protobuf/text_format.h"
 #include "google/protobuf/util/message_differencer.h"
-#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 namespace mobility::diff_drive {
@@ -43,7 +43,8 @@ TEST(DiffDriveConversion, ArcVector) {
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"""(
     translation: 2.0
     rotation: 3.0
-    )""", &proto));
+    )""",
+                                                            &proto));
 
   ArcVector data_out;
   ASSERT_TRUE(FromProto(proto, &data_out).ok());
@@ -61,7 +62,8 @@ TEST(DiffDriveConversion, WheelVector) {
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"""(
     left: 2.0
     right: 3.0
-    )""", &proto));
+    )""",
+                                                            &proto));
 
   WheelVector data_out;
   ASSERT_TRUE(FromProto(proto, &data_out).ok());
@@ -82,7 +84,8 @@ TEST(DiffDriveConversion, Kinematics) {
       right: 3.0
     }
     wheel_base: 1.0
-    )""", &proto));
+    )""",
+                                                            &proto));
 
   Kinematics data_out;
   ASSERT_TRUE(FromProto(proto, &data_out).ok());
@@ -116,7 +119,8 @@ TEST(DiffDriveConversion, BoxConstraints) {
       translation: 0.25
       rotation: 0.75
     }
-    )""", &proto));
+    )""",
+                                                            &proto));
 
   BoxConstraints data_out;
   ASSERT_TRUE(FromProto(proto, &data_out).ok());
@@ -187,7 +191,8 @@ TEST(DiffDriveConversion, DynamicLimits) {
         rotation: 7.5
       }
     }
-    )""", &proto));
+    )""",
+                                                            &proto));
 
   DynamicLimits data_out;
   ASSERT_TRUE(FromProto(proto, &data_out).ok());
@@ -275,14 +280,16 @@ TEST(DiffDriveConversion, TrajectoryLimits) {
       rotation: -2.1
     }
     min_cycle_duration: 0.02
-    )""", &proto_in));
+    )""",
+                                                            &proto_in));
 
   TrajectoryLimits data_out;
   ASSERT_TRUE(FromProto(proto_in, &data_out).ok());
   TrajectoryLimitsProto proto_out;
   ASSERT_TRUE(ToProto(data_out, &proto_out).ok());
 
-  EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equivalent(proto_in, proto_out));
+  EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equivalent(
+      proto_in, proto_out));
 }
 
 TEST(DiffDriveConversion, CurvePoint) {
@@ -294,7 +301,8 @@ TEST(DiffDriveConversion, CurvePoint) {
       rotation: 1.57
     }
     curvature: 1.0
-    )""", &proto));
+    )""",
+                                                            &proto));
 
   CurvePoint data_out;
   ASSERT_TRUE(FromProto(proto, &data_out).ok());
@@ -323,7 +331,8 @@ TEST(DiffDriveConversion, CurvePtAndCord) {
       curvature: 1.0
     }
     cord_length: 5.0
-    )""", &proto));
+    )""",
+                                                            &proto));
 
   CurvePtAndCord data_out;
   ASSERT_TRUE(FromProto(proto, &data_out).ok());
@@ -378,7 +387,8 @@ points {
   }
   cord_length: 6.236068
 }
-)""", &proto));
+)""",
+                                                            &proto));
   ASSERT_NE(0, proto.points_size());
 
   Curve data_out(21);
@@ -453,7 +463,8 @@ points {
   vec: 1.0
 }
 final_angle: -1.57
-)""", &proto));
+)""",
+                                                            &proto));
   ASSERT_NE(0, proto.points_size());
 
   Curve data_out(21);
@@ -513,7 +524,8 @@ TEST(DiffDriveConversion, State) {
       translation: 4.0
       rotation: 5.0
     }
-    )""", &proto));
+    )""",
+                                                            &proto));
 
   State data_out;
   ASSERT_TRUE(FromProto(proto, &data_out).ok());
@@ -547,7 +559,8 @@ TEST(DiffDriveConversion, StateAndTime) {
       }
     }
     time: 1.0
-    )""", &proto));
+    )""",
+                                                            &proto));
 
   StateAndTime data_out;
   ASSERT_TRUE(FromProto(proto, &data_out).ok());
@@ -613,7 +626,8 @@ states {
   }
   time: 6.236068
 }
-)""", &proto));
+)""",
+                                                            &proto));
   ASSERT_NE(0, proto.states_size());
 
   Trajectory data_out(21);
@@ -694,14 +708,16 @@ TEST(DiffDriveConversion, WheelState) {
       left: 4.0
       right: 5.0
     }
-    )""", &proto_in));
+    )""",
+                                                            &proto_in));
 
   WheelState data_out;
   ASSERT_TRUE(FromProto(proto_in, &data_out).ok());
   WheelStateProto proto_out;
   ASSERT_TRUE(ToProto(data_out, &proto_out).ok());
 
-  EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equivalent(proto_in, proto_out));
+  EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equivalent(
+      proto_in, proto_out));
 }
 
 TEST(DiffDriveConversion, WheelStateAndTotalMotion) {
@@ -718,14 +734,16 @@ TEST(DiffDriveConversion, WheelStateAndTotalMotion) {
         right: 5.0
       }
     }
-    )""", &proto_in));
+    )""",
+                                                            &proto_in));
 
   WheelStateAndTotalMotion data_out;
   ASSERT_TRUE(FromProto(proto_in, &data_out).ok());
   WheelStateAndTotalMotionProto proto_out;
   ASSERT_TRUE(ToProto(data_out, &proto_out).ok());
 
-  EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equivalent(proto_in, proto_out));
+  EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equivalent(
+      proto_in, proto_out));
 }
 
 TEST(DiffDriveConversion, WheelCurve) {
@@ -770,7 +788,8 @@ TEST(DiffDriveConversion, WheelCurve) {
           }
         }
       }
-    )""", &proto_in));
+    )""",
+                                                            &proto_in));
 
   WheelCurve data_out(21);
   ASSERT_TRUE(FromProto(proto_in, &data_out).ok());
@@ -779,7 +798,8 @@ TEST(DiffDriveConversion, WheelCurve) {
   WheelCurveProto proto_out;
   ASSERT_TRUE(ToProto(data_out, &proto_out).ok());
 
-  EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equivalent(proto_in, proto_out));
+  EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equivalent(
+      proto_in, proto_out));
 }
 
 }  // namespace

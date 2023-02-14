@@ -23,7 +23,8 @@ namespace mobility::diff_drive::testing {
 
 const Kinematics kTestKinematics({2.0, 2.0}, 2.0);
 
-// Use the same values as for kTestKinematics, but do not rely on initialization.
+// Use the same values as for kTestKinematics, but do not rely on
+// initialization.
 const DynamicLimits kTestDynamicLimits({{2.0, 2.0}, 2.0},
                                        /*max_wheel_velocity=*/{1.0, 1.0},
                                        /*max_wheel_acceleration=*/{2.0, 2.0},
@@ -147,4 +148,3 @@ const TestRampTrajectoryFactory kTestRampTrajFactory{};
 const Trajectory& kTestRampTraj = kTestRampTrajFactory.trajectory;
 
 }  // namespace mobility::diff_drive::testing
-

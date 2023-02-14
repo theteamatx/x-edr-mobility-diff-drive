@@ -19,10 +19,10 @@
 #include <string>
 #include <vector>
 
+#include "absl/strings/str_format.h"
 #include "diff_drive/kinematics.h"
 #include "diff_drive/type_aliases.h"
 #include "gtest/gtest.h"
-#include "absl/strings/str_format.h"
 
 namespace mobility::diff_drive {
 

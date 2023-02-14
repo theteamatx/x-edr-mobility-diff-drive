@@ -24,13 +24,15 @@ namespace mobility::diff_drive {
 Kinematics::Kinematics(const WheelVector &wheel_radius, double wheel_base)
     : wheel_radius_(wheel_radius), wheel_base_(wheel_base) {
   CHECK_GT(wheel_radius.Left(), 0.0) << "Wheel radius (left) must be positive";
-  CHECK_GT(wheel_radius.Right(), 0.0) << "Wheel radius (right) must be positive";
+  CHECK_GT(wheel_radius.Right(), 0.0)
+      << "Wheel radius (right) must be positive";
   CHECK_GT(wheel_base, 0.0) << "Wheel base must be positive";
 }
 
 void Kinematics::Configure(const WheelVector &wheel_radius, double wheel_base) {
   CHECK_GT(wheel_radius.Left(), 0.0) << "Wheel radius (left) must be positive";
-  CHECK_GT(wheel_radius.Right(), 0.0) << "Wheel radius (right) must be positive";
+  CHECK_GT(wheel_radius.Right(), 0.0)
+      << "Wheel radius (right) must be positive";
   CHECK_GT(wheel_base, 0.0) << "Wheel base must be positive";
   wheel_radius_ = wheel_radius;
   wheel_base_ = wheel_base;

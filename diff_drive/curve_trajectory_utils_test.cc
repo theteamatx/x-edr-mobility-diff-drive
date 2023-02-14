@@ -23,18 +23,18 @@
 #include <string>
 #include <vector>
 
-#include "eigenmath/matchers.h"
-#include "eigenmath/sampling.h"
+#include "absl/flags/flag.h"
 #include "diff_drive/dynamic_limits.h"
 #include "diff_drive/matchers.h"
 #include "diff_drive/test_curves.h"
 #include "diff_drive/test_trajectories.h"
 #include "diff_drive/test_utils.h"
 #include "diff_drive/test_wheel_curves.h"
+#include "eigenmath/matchers.h"
+#include "eigenmath/sampling.h"
 #include "genit/zip_iterator.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/flags/flag.h"
 
 ABSL_FLAG(bool, print_results, false,
           "Print the results of curve / trajectory computations.");
@@ -285,7 +285,7 @@ TEST(CurveTrajectoryUtils, DecaySpeedOfTrajectory) {
             kTestClothoidTraj.GetTimeSpan().Length());
   for (const auto& [orig_state, new_state] :
        genit::ZipRange(kTestClothoidTraj.GetStateIteratorRange(),
-                warped_traj.GetStateIteratorRange())) {
+                       warped_traj.GetStateIteratorRange())) {
     EXPECT_GE(new_state.time, orig_state.time);
     EXPECT_THAT(new_state.state.GetPose(),
                 IsApprox(orig_state.state.GetPose(), kEpsilon));
@@ -1112,10 +1112,10 @@ TEST(CurveTrajectoryUtils, FindClothoidTrajectoryForCurveRegressions) {
   }
 
   {  // A small straight segment with a bit of angle round-off error.
-    const Curve curve_segment = ToCurve(
-        {{0.0, -55.1, -51.40000000000001, 0.0, 0.0},
-         {0.100000000000001, -55, -51.40000000000001, 6.805931991089454e-07,
-          0.0}});
+    const Curve curve_segment =
+        ToCurve({{0.0, -55.1, -51.40000000000001, 0.0, 0.0},
+                 {0.100000000000001, -55, -51.40000000000001,
+                  6.805931991089454e-07, 0.0}});
 
     const double desired_speed = 0.3;
     const double tolerance = 0.001;
@@ -1132,7 +1132,7 @@ TEST(CurveTrajectoryUtils, FindClothoidTrajectoryForCurveRegressions) {
     EXPECT_TRUE(clothoid_traj.HasMonotonicTimeValues());
     EXPECT_THAT(clothoid_traj, SatisfiesLimits(dd_limits));
     EXPECT_LT(clothoid_traj.GetTimeSpan().Length(), 80.0) << "Trajectory =\n"
-                                                         << clothoid_traj;
+                                                          << clothoid_traj;
   }
 
   {  // A curve whose conversion regressed in cl/288953117 causing b/147482628.

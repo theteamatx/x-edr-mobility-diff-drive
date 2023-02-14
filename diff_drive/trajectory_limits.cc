@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include "diff_drive/trajectory_limits.h"
 
 #include <algorithm>
@@ -20,8 +19,8 @@
 #include <limits>
 
 #include "diff_drive/interval.h"
-#include "genit/iterator_range.h"
 #include "diff_drive/kinematics.h"
+#include "genit/iterator_range.h"
 
 namespace mobility::diff_drive {
 
@@ -186,7 +185,8 @@ void TrajectoryLimits::GetLinearBangBangParameters(
       std::ceil((velocity_range.min() - start_velocity) / velocity_step));
   const int max_steps_first = std::lrint(
       std::floor((velocity_range.max() - start_velocity) / velocity_step));
-  const auto steps_range = genit::IndexRange(min_steps_first, max_steps_first + 1);
+  const auto steps_range =
+      genit::IndexRange(min_steps_first, max_steps_first + 1);
   // Find the ramps which get closest to the desired distance. Obtain
   //  displacement(n_steps - 1) < delta_in_position <= displacement(n_steps).
   // Get almost 50% runtime reduction on average for benchmark input

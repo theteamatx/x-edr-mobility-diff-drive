@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include "diff_drive/diff_drive_conversion.h"
 
 #include <algorithm>
 #include <cmath>
 #include <utility>
 
-#include "eigenmath/eigenmath.pb.h"
-#include "eigenmath/conversions.h"
+#include "absl/log/check.h"
+#include "absl/status/status.h"
+#include "absl/strings/str_cat.h"
 #include "diff_drive/curve.h"
 #include "diff_drive/curve_point.h"
 #include "diff_drive/dynamic_limits.h"
@@ -30,9 +30,8 @@
 #include "diff_drive/trajectory_limits.h"
 #include "diff_drive/wheel_curve.h"
 #include "diff_drive/wheel_state.h"
-#include "absl/log/check.h"
-#include "absl/status/status.h"
-#include "absl/strings/str_cat.h"
+#include "eigenmath/conversions.h"
+#include "eigenmath/eigenmath.pb.h"
 
 namespace mobility::diff_drive {
 
@@ -41,7 +40,10 @@ constexpr double kEpsilon = 1.0e-3;
 }  // namespace
 
 #define MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(expr) \
-  { auto status = (expr); if (!status.ok()) return status; }
+  {                                               \
+    auto status = (expr);                         \
+    if (!status.ok()) return status;              \
+  }
 
 absl::Status FromProto(const ArcVectorProto &proto, ArcVector *data_out) {
   data_out->Translation() = proto.translation();
@@ -69,7 +71,8 @@ absl::Status ToProto(const WheelVector &data_in, WheelVectorProto *proto_out) {
 
 absl::Status FromProto(const KinematicsProto &proto, Kinematics *data_out) {
   WheelVector wheel_radius;
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(FromProto(proto.wheel_radius(), &wheel_radius));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      FromProto(proto.wheel_radius(), &wheel_radius));
   *data_out = Kinematics(wheel_radius, proto.wheel_base());
   return absl::OkStatus();
 }
@@ -109,10 +112,13 @@ absl::Status ToProto(const BoxConstraints &data_in,
 absl::Status FromProto(const DynamicLimitsProto &proto,
                        DynamicLimits *data_out) {
   Kinematics kinematics;
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(FromProto(proto.kinematics(), &kinematics));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      FromProto(proto.kinematics(), &kinematics));
   BoxConstraints vel_limits, accel_limits;
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(FromProto(proto.velocity_limits(), &vel_limits));
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(FromProto(proto.acceleration_limits(), &accel_limits));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      FromProto(proto.velocity_limits(), &vel_limits));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      FromProto(proto.acceleration_limits(), &accel_limits));
   *data_out = DynamicLimits(kinematics, vel_limits, accel_limits);
   return absl::OkStatus();
 }
@@ -123,8 +129,8 @@ absl::Status ToProto(const DynamicLimits &data_in,
       ToProto(data_in.GetKinematics(), proto_out->mutable_kinematics()));
   MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
       ToProto(data_in.VelocityLimits(), proto_out->mutable_velocity_limits()));
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(ToProto(data_in.AccelerationLimits(),
-                          proto_out->mutable_acceleration_limits()));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(ToProto(
+      data_in.AccelerationLimits(), proto_out->mutable_acceleration_limits()));
   return absl::OkStatus();
 }
 
@@ -145,10 +151,12 @@ absl::Status FromProto(const TrajectoryLimitsProto &proto,
 absl::Status ToProto(const TrajectoryLimits &data_in,
                      TrajectoryLimitsProto *proto_out) {
   CHECK_NE(proto_out, nullptr);
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(ToProto(data_in.GetMaxWheelVelocityJump(),
-                          proto_out->mutable_max_wheel_velocity_jump()));
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(ToProto(data_in.GetMaxArcVelocityJump(),
-                          proto_out->mutable_max_arc_velocity_jump()));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      ToProto(data_in.GetMaxWheelVelocityJump(),
+              proto_out->mutable_max_wheel_velocity_jump()));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      ToProto(data_in.GetMaxArcVelocityJump(),
+              proto_out->mutable_max_arc_velocity_jump()));
   proto_out->set_min_cycle_duration(data_in.GetMinCycleDuration());
   return absl::OkStatus();
 }
@@ -160,7 +168,8 @@ absl::Status FromProto(const CurvePointProto &proto, CurvePoint *data_out) {
 }
 
 absl::Status ToProto(const CurvePoint &data_in, CurvePointProto *proto_out) {
-  *proto_out->mutable_pose() = eigenmath::conversions::ProtoFromPose(data_in.GetPose());
+  *proto_out->mutable_pose() =
+      eigenmath::conversions::ProtoFromPose(data_in.GetPose());
   proto_out->set_curvature(data_in.GetCurvature());
   return absl::OkStatus();
 }
@@ -239,7 +248,8 @@ absl::Status ToProto(const Curve &data_in,
                      PiecewiseLinearCurveProto *proto_out) {
   for (auto &pt : data_in.GetCurvePointIteratorRange()) {
     const auto &translation = pt.point.GetPose().translation();
-    *proto_out->add_points() = eigenmath::conversions::ProtoFromVector2d(translation);
+    *proto_out->add_points() =
+        eigenmath::conversions::ProtoFromVector2d(translation);
   }
   proto_out->set_final_angle(data_in.GetFinish().point.GetPose().angle());
   return absl::OkStatus();
@@ -248,13 +258,15 @@ absl::Status ToProto(const Curve &data_in,
 absl::Status FromProto(const StateProto &proto, State *data_out) {
   eigenmath::Pose2d pose = eigenmath::conversions::PoseFromProto(proto.pose());
   ArcVector arc_vel;
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(FromProto(proto.arc_velocity(), &arc_vel));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      FromProto(proto.arc_velocity(), &arc_vel));
   *data_out = State(pose, arc_vel);
   return absl::OkStatus();
 }
 
 absl::Status ToProto(const State &data_in, StateProto *proto_out) {
-  *proto_out->mutable_pose() = eigenmath::conversions::ProtoFromPose(data_in.GetPose());
+  *proto_out->mutable_pose() =
+      eigenmath::conversions::ProtoFromPose(data_in.GetPose());
   MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
       ToProto(data_in.GetArcVelocity(), proto_out->mutable_arc_velocity()));
   return absl::OkStatus();
@@ -295,8 +307,10 @@ absl::Status FromProto(const WheelStateProto &proto, WheelState *data_out) {
   CHECK_NE(data_out, nullptr);
   WheelVector positions;
   WheelVector rates;
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(FromProto(proto.wheel_positions(), &positions));
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(FromProto(proto.wheel_motion_rates(), &rates));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      FromProto(proto.wheel_positions(), &positions));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      FromProto(proto.wheel_motion_rates(), &rates));
   data_out->SetPositions(positions);
   data_out->SetMotionRates(rates);
   return absl::OkStatus();
@@ -306,8 +320,8 @@ absl::Status ToProto(const WheelState &data_in, WheelStateProto *proto_out) {
   CHECK_NE(proto_out, nullptr);
   MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
       ToProto(data_in.GetPositions(), proto_out->mutable_wheel_positions()));
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(ToProto(data_in.GetMotionRates(),
-                          proto_out->mutable_wheel_motion_rates()));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(ToProto(
+      data_in.GetMotionRates(), proto_out->mutable_wheel_motion_rates()));
   return absl::OkStatus();
 }
 
@@ -323,7 +337,8 @@ absl::Status FromProto(const WheelStateAndTotalMotionProto &proto,
 absl::Status ToProto(const WheelStateAndTotalMotion &data_in,
                      WheelStateAndTotalMotionProto *proto_out) {
   CHECK_NE(proto_out, nullptr);
-  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(ToProto(data_in.state, proto_out->mutable_state()));
+  MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+      ToProto(data_in.state, proto_out->mutable_state()));
   proto_out->set_total_motion(data_in.total_motion);
   return absl::OkStatus();
 }
@@ -347,7 +362,8 @@ absl::Status FromProto(const WheelCurveProto &proto, WheelCurve *data_out) {
 absl::Status ToProto(const WheelCurve &data_in, WheelCurveProto *proto_out) {
   CHECK_NE(proto_out, nullptr);
   for (const auto &state : data_in.GetWheelStateIteratorRange()) {
-    MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(ToProto(state, proto_out->add_states()));
+    MOBILITY_DIFF_DRIVE_RETURN_IF_ERROR(
+        ToProto(state, proto_out->add_states()));
   }
   return absl::OkStatus();
 }

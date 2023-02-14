@@ -19,18 +19,18 @@
 #include <string>
 #include <vector>
 
+#include "absl/random/distributions.h"
+#include "absl/strings/str_format.h"
+#include "benchmark/benchmark.h"
+#include "diff_drive/state.h"
+#include "diff_drive/trajectory.h"
 #include "eigenmath/matchers.h"
 #include "eigenmath/sampling.h"
 #include "eigenmath/so2_interval.h"
 #include "genit/iterator_range.h"
 #include "genit/zip_iterator.h"
-#include "diff_drive/state.h"
-#include "diff_drive/trajectory.h"
-#include "benchmark/benchmark.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/random/distributions.h"
-#include "absl/strings/str_format.h"
 
 namespace mobility::diff_drive {
 

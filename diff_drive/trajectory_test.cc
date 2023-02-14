@@ -19,11 +19,11 @@
 #include <iterator>
 #include <vector>
 
-#include "eigenmath/matchers.h"
 #include "diff_drive/curve_trajectory_utils.h"
 #include "diff_drive/test_trajectories.h"
 #include "diff_drive/test_utils.h"
 #include "diff_drive/type_aliases.h"
+#include "eigenmath/matchers.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

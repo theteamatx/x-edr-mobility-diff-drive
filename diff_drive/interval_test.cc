@@ -20,7 +20,7 @@
 
 #include "gtest/gtest.h"
 
-namespace  mobility {
+namespace mobility {
 namespace {
 
 // Test intersection between the two intervals i1 and i2.  Tries
