@@ -3,5 +3,6 @@ bazel-bin
 bazel-mobility-diff-drive
 bazel-out
 bazel-testlogs
+bazel-x-edr-mobility-diff-drive
 
 
