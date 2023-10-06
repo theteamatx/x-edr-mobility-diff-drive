@@ -66,11 +66,11 @@ cc_library(
     ],
     deps = [
         ":interval",
-        "@eigenmath//eigenmath",
-        "@genit//genit:iterators",
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/strings:str_format",
+        "@x_edr_eigenmath//eigenmath",
+        "@x_edr_genit//genit:iterators",
     ],
 )
 
@@ -89,8 +89,8 @@ cc_library(
     deps = [
         ":base_feedback_control_config_cc_proto",
         ":differential_drive",
-        "@eigenmath//eigenmath",
         "@com_google_absl//absl/types:span",
+        "@x_edr_eigenmath//eigenmath",
     ],
 )
 
@@ -100,7 +100,7 @@ proto_library(
         "diff_drive.proto",
     ],
     deps = [
-        "@eigenmath//eigenmath:eigenmath_proto",
+        "@x_edr_eigenmath//eigenmath:eigenmath_proto",
     ],
 )
 
@@ -120,11 +120,11 @@ cc_library(
     deps = [
         ":diff_drive_cc_proto",
         ":differential_drive",
-        "@eigenmath//eigenmath:eigenmath_cc_proto",
-        "@eigenmath//eigenmath:conversions",
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
+        "@x_edr_eigenmath//eigenmath:eigenmath_cc_proto",
+        "@x_edr_eigenmath//eigenmath:conversions",
     ],
 )
 
@@ -137,9 +137,9 @@ cc_test(
         ":diff_drive_cc_proto",
         ":diff_drive_conversion",
         ":differential_drive",
-        "@eigenmath//eigenmath:eigenmath_cc_proto",
         "@com_google_protobuf//:protobuf",
         "@com_google_googletest//:gtest_main",
+        "@x_edr_eigenmath//eigenmath:eigenmath_cc_proto",
     ],
 )
 
@@ -186,8 +186,8 @@ cc_library(
     ],
     deps = [
         ":differential_drive",
-        "@eigenmath//eigenmath:matchers",
         "@com_google_googletest//:gtest",
+        "@x_edr_eigenmath//eigenmath:matchers",
     ],
 )
 
@@ -233,10 +233,10 @@ cc_test(
         ":differential_drive",
         ":matchers",
         ":test_fixtures",
-        "@eigenmath//eigenmath:matchers",
-        "@eigenmath//eigenmath:sampling",
         "@com_google_googletest//:gtest_main",
         "@com_google_absl//absl/flags:flag",
+        "@x_edr_eigenmath//eigenmath:matchers",
+        "@x_edr_eigenmath//eigenmath:sampling",
     ],
 )
 
@@ -282,8 +282,8 @@ cc_test(
     deps = [
         ":differential_drive",
         ":test_fixtures",
-        "@eigenmath//eigenmath:matchers",
         "@com_google_googletest//:gtest_main",
+        "@x_edr_eigenmath//eigenmath:matchers",
     ],
 )
 
@@ -294,14 +294,14 @@ cc_test(
     ],
     deps = [
         ":differential_drive",
-        "@eigenmath//eigenmath",
-        "@eigenmath//eigenmath:matchers",
-        "@eigenmath//eigenmath:sampling",
-        "@genit//genit:iterators",
         "@com_google_benchmark//:benchmark",
         "@com_google_googletest//:gtest_main",
         "@com_google_absl//absl/random:distributions",
         "@com_google_absl//absl/strings:str_format",
+        "@x_edr_eigenmath//eigenmath",
+        "@x_edr_eigenmath//eigenmath:matchers",
+        "@x_edr_eigenmath//eigenmath:sampling",
+        "@x_edr_genit//genit:iterators",
     ],
 )
 
@@ -336,8 +336,8 @@ cc_test(
     ],
     deps = [
         ":motion_control",
-        "@eigenmath//eigenmath:matchers",
         "@com_google_googletest//:gtest_main",
+        "@x_edr_eigenmath//eigenmath:matchers",
     ],
 )
 
@@ -349,8 +349,8 @@ cc_test(
     deps = [
         ":differential_drive",
         ":motion_control",
-        "@eigenmath//eigenmath:matchers",
         "@com_google_googletest//:gtest_main",
+        "@x_edr_eigenmath//eigenmath:matchers",
     ],
 )
 
@@ -362,7 +362,7 @@ cc_test(
     deps = [
         ":differential_drive",
         ":motion_control",
-        "@eigenmath//eigenmath:matchers",
         "@com_google_googletest//:gtest_main",
+        "@x_edr_eigenmath//eigenmath:matchers",
     ],
 )
